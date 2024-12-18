@@ -152,7 +152,6 @@ def get_open_ports():
     
     return open_ports_str
 def scan_ip(ip_address):
-    """Scan a specific IP for open ports and vulnerabilities"""
     scanner = CVEScanner()
     result_str = f"Scanning IP: {ip_address}\n"
     
