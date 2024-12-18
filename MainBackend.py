@@ -11,7 +11,6 @@ class CVEScanner:
         self.results = []
 
     def search_nvd(self, product, version):
-        """Search NVD database for vulnerabilities"""
         result_str = ''
         try:
             base_url = "https://services.nvd.nist.gov/rest/json/cves/2.0"
@@ -37,7 +36,6 @@ class CVEScanner:
         return result_str
 
     def scan_network(self):
-        """Scan the local network for attached systems"""
         local_ip = self.get_local_ip()
         subnet = self.get_subnet(local_ip)
         devices_str = ""
@@ -59,7 +57,6 @@ class CVEScanner:
         return devices_str
 
     def scan_services(self):
-        """Scan the local machine for running services"""
         local_ip = self.get_local_ip()
         nm = nmap.PortScanner()
         nm.scan(local_ip, arguments='-sV')
@@ -77,7 +74,6 @@ class CVEScanner:
         return services
 
     def get_local_ip(self):
-        """Get the real IP address of the machine by connecting to an external address"""
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         ip_address = s.getsockname()[0]
@@ -85,7 +81,6 @@ class CVEScanner:
         return ip_address
 
     def get_subnet(self, local_ip):
-        """Get the subnet for the local IP address based on its class."""
         ip = ipaddress.ip_address(local_ip)
         
         if ip.is_private:
@@ -93,7 +88,6 @@ class CVEScanner:
             return str(network)
         return None
     def search_vulners(self, product, version):
-        """Search Vulners database for severe vulnerabilities"""
         result_str = ''
         try:
             base_url = "https://vulners.com/api/v3/search/lucene/"
@@ -107,7 +101,7 @@ class CVEScanner:
                 results = response.json().get('data', {}).get('search', [])
                 for vuln in results:
                     cvss_score = vuln.get('cvss', {}).get('score', 0)
-                    if cvss_score >= 7.0:  # Only severe vulnerabilities
+                    if cvss_score >= 7.0:  
                         self.results.append({
                             'source': 'Vulners',
                             'cve_id': vuln.get('cvelist', ['N/A'])[0],
@@ -122,7 +116,6 @@ class CVEScanner:
         return result_str
 
 def scan_service():
-    """Main function to scan services for vulnerabilities"""
     scanner = CVEScanner()
     result_str = ""
     
@@ -143,11 +136,10 @@ def scan_service():
     return result_str
 
 def get_open_ports():
-    """Scan the local machine for open ports"""
     scanner = CVEScanner()
     local_ip = scanner.get_local_ip()
     nm = nmap.PortScanner()
-    nm.scan(local_ip, arguments='-Pn -p-')  # '-p-' scans all ports
+    nm.scan(local_ip, arguments='-Pn -p-') 
     open_ports_str = "Open Ports:\n"
     
     for host in nm.all_hosts():
@@ -186,7 +178,6 @@ def scan_ip(ip_address):
     return result_str
 
 
-# Run the service scan and retrieve the results as a string
 '''scan_result = scan_service()
 print(scan_result)
 print(get_open_ports())
