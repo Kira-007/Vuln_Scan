@@ -158,7 +158,7 @@ def scan_ip(ip_address):
     
     try:
         nm = nmap.PortScanner()
-        nm.scan(ip_address, arguments='--unprivileged  -sV')  # Adjust scan arguments
+        nm.scan(ip_address, arguments='--unprivileged  -sV')  
 
         if ip_address in nm.all_hosts():
             for proto in nm[ip_address].all_protocols():
