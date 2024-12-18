@@ -21,7 +21,7 @@ def search_nvd(self, product, version):
             }
             response = requests.get(base_url, params=params, headers=self.headers)
 ```
-Base url for NVD's Rest API and  
+setting Base url for NVD's Rest API and  
 the parameters for the HTTP request that will be sent to the NVD API  
 the response url looks like  
 ``GET https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Apache%202.4.46&resultsPerPage=100``
